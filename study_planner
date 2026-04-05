@@ -1,0 +1,24 @@
+-- 1. Create the Database
+CREATE DATABASE IF NOT EXISTS study_planner;
+USE study_planner;
+
+-- 2. Create Users Table (For Login/Register feature)
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL, -- Will store hashed passwords
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Create Tasks Table (Linked to Users)
+CREATE TABLE IF NOT EXISTS tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT, -- Keeps track of which user owns the task
+    title VARCHAR(255) NOT NULL,
+    subject VARCHAR(100),
+    status ENUM('Pending', 'Completed') DEFAULT 'Pending',
+    due_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+ALTER TABLE tasks ADD COLUMN completed BOOLEAN DEFAULT FALSE;
